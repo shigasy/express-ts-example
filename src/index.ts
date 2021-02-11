@@ -21,5 +21,13 @@ app.get('/users', (req, res) => {
   res.status(200).send({ message: '-------------- Hello Users! --------------' })
 })
 
-app.listen(port)
-console.log('listen on port' + port)
+if (process.env.NODE_ENV === 'production') {
+
+} else {
+  console.log('listen on port' + port)
+  app.listen(port)
+}
+
+module.exports = {
+  app
+};
