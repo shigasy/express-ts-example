@@ -1,15 +1,16 @@
 import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
-import { getConnectionOptions, createConnection, BaseEntity } from 'typeorm'
+// import { getConnectionOptions, createConnection, BaseEntity } from 'typeorm'
 import bodyParser from 'body-parser'
 
-let app = async () => {
+
+const app = async () => {
   const app = express()
 
-  const connectionOptions = await getConnectionOptions()
+  // const connectionOptions = await getConnectionOptions()
 
-  const connection = await createConnection(connectionOptions)
+  // const connection = await createConnection(connectionOptions)
 
   app.use(helmet())
   app.use(cors())
@@ -27,15 +28,13 @@ let app = async () => {
   app.get('/users', (req, res) => {
     res.status(200).send({ message: '-------------- Hello Users! --------------' })
   })
+  console.log('listen on port' + port)
+  app.listen(port)
 }
 app()
   .then(() => {
 
   })
-  .catch((error) => {
-    console.log(error)
+  .catch((e) => {
+    console.log(e);
   })
-
-module.exports = {
-  app
-};

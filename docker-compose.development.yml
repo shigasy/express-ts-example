@@ -3,7 +3,9 @@ version: '3.7'
 services:
   app:
     container_name: app-server
-    image: 'node:12-alpine'
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     volumes:
       - './:/shared_dir:cached'
     working_dir: '/shared_dir'
