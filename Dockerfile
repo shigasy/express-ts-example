@@ -22,4 +22,4 @@ RUN npm install --only=production
 COPY . ./
 
 # Run the web service on container startup.
-CMD [ "node", "./dist/index.js" ]
+CMD [ "npm", "start" ]

@@ -12,7 +12,10 @@
     "build": "npm-run-all clean tsc",
     "start": "node .",
     "dev": "ts-node src/index.ts",
-    "dev:watch": "ts-node-dev --respawn src/index.ts"
+    "dev:watch": "ts-node-dev --respawn src/index.ts",
+    "deploy": "npm-run-all build deploy:container deploy:cloudrun",
+    "deploy:container": "gcloud builds submit --tag gcr.io/`gcloud config get-value project`/express-typescript-example",
+    "deploy:cloudrun": "gcloud run deploy --image gcr.io/`gcloud config get-value project`/express-typescript-example --platform managed --region asia-northeast1"
   },
   "repository": {
     "type": "git",

@@ -28,3 +28,19 @@ Step 6/6 : CMD [ "node", "./dist/index.js" ]
 Removing intermediate container 2253605be8e8
  ---> 41f002d89dd6
 ```
+
+## beta版 1発デプロイ
+https://cloud.google.com/blog/ja/products/serverless/build-and-deploy-an-app-to-cloud-run-with-a-single-command
+Dockerfileなくても、いい感じにDockerfile書いてくれてCloud Runにデプロイしてくれる
+Dockerfileあったら、それ参考にbuildしてデプロイしてくれる
+
+```
+gcloud beta run deploy --source=[DIRECTORY]
+```
+
+## メモ
+dist/index.jsが実行されているから、
+再度imageをbuildして、cloud runにデプロイしなければならない
+
+今はローカルでやっているが、
+Cloud BuildなどでCI/CDしたほうがいい
