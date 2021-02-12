@@ -1,32 +1,40 @@
 import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
-const app = express()
-
-app.use(helmet())
-app.use(cors())
-
+import { getConnectionOptions, createConnection, BaseEntity } from 'typeorm'
 import bodyParser from 'body-parser'
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+let app = async () => {
+  const app = express()
 
-const port = process.env.PORT || 3000
+  const connectionOptions = await getConnectionOptions()
 
-app.get('/', (req, res) => {
-  res.status(200).send({ message: 'Hello World' })
-})
+  const connection = await createConnection(connectionOptions)
 
-app.get('/users', (req, res) => {
-  res.status(200).send({ message: '-------------- Hello Users! --------------' })
-})
+  app.use(helmet())
+  app.use(cors())
 
-if (process.env.NODE_ENV === 'production') {
 
-} else {
-  console.log('listen on port' + port)
-  app.listen(port)
+  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(bodyParser.json())
+
+  const port = process.env.PORT || 3000
+
+  app.get('/', (req, res) => {
+    res.status(200).send({ message: 'Hello World' })
+  })
+
+  app.get('/users', (req, res) => {
+    res.status(200).send({ message: '-------------- Hello Users! --------------' })
+  })
 }
+app()
+  .then(() => {
+
+  })
+  .catch((error) => {
+    console.log(error)
+  })
 
 module.exports = {
   app
