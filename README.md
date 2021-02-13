@@ -44,3 +44,12 @@ dist/index.jsが実行されているから、
 
 今はローカルでやっているが、
 Cloud BuildなどでCI/CDしたほうがいい
+
+GitHubデプロイ後、Cloud Buildでビルドしてコンテナイメージを保存し、Cloud Runにデプロイ
+Cloud BuildでTypeScriptをbuildしたり、migrationしたりする。
+## env Cloud SQLにつなぐ方法
+
+環境変数をCloud Runに設定（secret managerとか使ったほうが良さそう）
+接続で、Cloud SQLに接続でインスタンスを設定すると、Cloud SQL プロキシが自動的に有効化されて構成される
+
+開発環境では、.envにdockerのDBを記入する

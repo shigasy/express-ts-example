@@ -3,6 +3,23 @@ import helmet from 'helmet'
 import cors from 'cors'
 // import { getConnectionOptions, createConnection, BaseEntity } from 'typeorm'
 import bodyParser from 'body-parser'
+require('dotenv').config();
+
+const { Pool, Client } = require('pg')
+// const connectionString = 'postgres://postgres:postgres@db:5432/postgres'
+// const pool = new Pool({
+  // connectionString: connectionString,
+// })
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+})
+pool.query('SELECT NOW()', (err: any, res: any) => {
+  console.log(err, res)
+  pool.end()
+})
 
 
 const app = async () => {
