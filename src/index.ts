@@ -1,11 +1,10 @@
 import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
-// import { getConnectionOptions, createConnection, BaseEntity } from 'typeorm'
 import bodyParser from 'body-parser'
 require('dotenv').config();
 
-const { Pool, Client } = require('pg')
+const { Pool } = require('pg')
 // const connectionString = 'postgres://postgres:postgres@db:5432/postgres'
 // const pool = new Pool({
   // connectionString: connectionString,
@@ -18,16 +17,11 @@ const pool = new Pool({
 })
 pool.query('SELECT NOW()', (err: any, res: any) => {
   console.log(err, res)
-  pool.end()
 })
 
 
 const app = async () => {
   const app = express()
-
-  // const connectionOptions = await getConnectionOptions()
-
-  // const connection = await createConnection(connectionOptions)
 
   app.use(helmet())
   app.use(cors())
@@ -38,12 +32,29 @@ const app = async () => {
 
   const port = process.env.PORT || 3000
 
-  app.get('/', (req, res) => {
-    res.status(200).send({ message: 'Hello World' })
+  app.get('/', async (req, res) => {
+    const client = await pool.connect()
+    const dbRes = await client.query('SELECT NOW()', (err: any, res: any) => {
+      console.log(err, res)
+      client.release()
+    })
+    res.status(200).send({ message: 'Hello World', db: dbRes })
   })
 
-  app.get('/users', (req, res) => {
-    res.status(200).send({ message: '-------------- Hello Userssss!!!!!!!!!!!!!!!🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 --------------' })
+  app.get('/users', async (req, res) => {
+    const client = await pool.connect()
+    const dbRes = await client.query('SELECT * FROM users')
+    client.release()
+    res.status(200).send({ message: '-------------- Hello Userssss!!!!!!!!!!!!!!!🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 --------------' , users: dbRes.rows})
+  })
+
+  app.get('/add-users', async (req, res) => {
+    const client = await pool.connect()
+    const user_id = Math.random()
+    const name = Math.random()
+    const dbRes = await client.query(`INSERT INTO users (user_id, name) VALUES (${user_id}, ${name});`)
+    client.release()
+    res.status(200).send({ message: '-------------- Hello Userssss!!!!!!!!!!!!!!!🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉 --------------' , users: dbRes.rows})
   })
 
   app.get('/test', (req, res) => {
