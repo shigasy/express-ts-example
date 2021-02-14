@@ -49,7 +49,30 @@ GitHubデプロイ後、Cloud Buildでビルドしてコンテナイメージを
 Cloud BuildでTypeScriptをbuildしたり、migrationしたりする。
 ## env Cloud SQLにつなぐ方法
 
-環境変数をCloud Runに設定（secret managerとか使ったほうが良さそう）
-接続で、Cloud SQLに接続でインスタンスを設定すると、Cloud SQL プロキシが自動的に有効化されて構成される
+環境変数をCloud Runに設定（Google Cloud の secret managerとか使ったほうが良さそう）
+接続で、Cloud SQLに接続でインスタンスを設定すると、自動的に管理アカウントでの接続が可能になる
 
 開発環境では、.envにdockerのDBを記入する
+
+## 手順
+
+### 開発環境
+1. npm install
+2. .envにする。中身変更の必要あれば変更する。現状はdocker-composeのDBの設定。
+3. docker-compose -f docker-compose.development.yml up
+
+### 本番デプロイ
+この辺のデプロイはCI/CD使いたい
+#### cloud run
+1. cloud runはGCPでcloud runやGCPの設定
+2. gcloudをインストール
+3. npm run deploy
+
+#### gae
+1. secret.copy,yamlをsecret.yamlにして環境変数入れる
+2. GCPでGAEのAPIとかを許可
+3. gcloudをインストール
+4. gcloud app deploy
+
+### 本番DB接続
+gcloud sql connect myinstance --user=postgres

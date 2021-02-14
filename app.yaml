@@ -1,3 +1,5 @@
 runtime: nodejs12 # or nodejs10
 service: express-typescript-example
 instance_class: F1
+includes:
+  - secret.yaml
